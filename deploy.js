@@ -11,7 +11,12 @@ async function main() {
         process.env.GOERLI_RPC_URL
     )
     // console.log(provider)
-    const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider)
+    const encryptedJson = fs.readFileSync("./.encryptedKey.json", "utf8")
+    let wallet = new ethers.Wallet.fromEncryptedJsonSync(
+        encryptedJson,
+        process.env.PRIVATE_KEY_PASSWORD
+    )
+    wallet = await wallet.connect(provider)
     console.log(wallet.address)
     // wallet with a private key
     const abi = fs.readFileSync("./SimpleStorage_sol_SimpleStorage.abi", "utf8") // synchronously read file to wait for it tobe done

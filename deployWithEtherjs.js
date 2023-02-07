@@ -1,6 +1,6 @@
-const ethers = require('ethers')
-const fs = require('fs-extra')
-require('dotenv').config()
+const ethers = require("ethers")
+const fs = require("fs-extra")
+require("dotenv").config()
 
 async function main() {
     // cimpile them in our code
@@ -8,8 +8,7 @@ async function main() {
     // http://127.0.0.1:7545
     // connection with the blockchain
     const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL)
-    console.log(typeof process.env.RPC_URL, process.env.RPC_URL)
-    const encryptedJson = fs.readFileSync('./.encryptedKey.json', 'utf8')
+    const encryptedJson = fs.readFileSync("./.encryptedKey.json", "utf8")
     let wallet = new ethers.Wallet.fromEncryptedJsonSync(
         encryptedJson,
         process.env.PRIVATE_KEY_PASSWORD
@@ -17,14 +16,14 @@ async function main() {
     wallet = await wallet.connect(provider)
     // console.log(wallet)
     // wallet with a private key
-    const abi = fs.readFileSync('./SimpleStorage_sol_SimpleStorage.abi', 'utf8') // synchronously read file to wait for it tobe done
+    const abi = fs.readFileSync("./SimpleStorage_sol_SimpleStorage.abi", "utf8") // synchronously read file to wait for it tobe done
     // console.log(abi)
     const binaryCode = fs.readFileSync(
-        './SimpleStorage_sol_SimpleStorage.bin',
-        'utf8'
+        "./SimpleStorage_sol_SimpleStorage.bin",
+        "utf8"
     )
     const contractFactory = new ethers.ContractFactory(abi, binaryCode, wallet)
-    console.log('deploying , please wait...')
+    console.log("deploying , please wait...")
     const contract = await contractFactory.deploy() // await means: STOP here wait for the contract to be deployed
     console.log(contract)
     const transactionReceipt = await contract.deployTransaction.wait(1) // wait for 1 block to complete
