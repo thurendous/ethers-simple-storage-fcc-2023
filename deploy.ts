@@ -1,6 +1,9 @@
-const ethers = require("ethers")
-const fs = require("fs-extra")
-require("dotenv").config()
+// const ethers = require("ethers")
+// const fs = require("fs-extra")
+// require("dotenv").config()
+import { ethers } from "ethers"
+import * as fs from "fs-extra"
+import "dotenv/config"
 
 async function main() {
     // cimpile them in our code
@@ -12,9 +15,9 @@ async function main() {
     )
     // console.log(provider)
     const encryptedJson = fs.readFileSync("./.encryptedKey.json", "utf8")
-    let wallet = new ethers.Wallet.fromEncryptedJsonSync(
-        encryptedJson,
-        process.env.PRIVATE_KEY_PASSWORD
+    let wallet = ethers.Wallet.fromEncryptedJsonSync(
+        encryptedJson!,
+        process.env.PRIVATE_KEY_PASSWORD!
     )
     wallet = await wallet.connect(provider)
     console.log(wallet.address)
