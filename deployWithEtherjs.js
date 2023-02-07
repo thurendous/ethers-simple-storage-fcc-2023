@@ -9,8 +9,12 @@ async function main() {
     // connection with the blockchain
     const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL)
     console.log(typeof process.env.RPC_URL, process.env.RPC_URL)
-    const PRIVATE_KEY = process.env.PRIVATE_KEY
-    const wallet = new ethers.Wallet(PRIVATE_KEY, provider)
+    const encryptedJson = fs.readFileSync('./.encryptedKey.json', 'utf8')
+    let wallet = new ethers.Wallet.fromEncryptedJsonSync(
+        encryptedJson,
+        process.env.PRIVATE_KEY_PASSWORD
+    )
+    wallet = await wallet.connect(provider)
     // console.log(wallet)
     // wallet with a private key
     const abi = fs.readFileSync('./SimpleStorage_sol_SimpleStorage.abi', 'utf8') // synchronously read file to wait for it tobe done
